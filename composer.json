@@ -1,0 +1,17 @@
+{
+    "name": "eltharin/reloadablefield",
+    "autoload": {
+        "psr-4": {
+            "Eltharin\\ReloadableFieldBundle\\": "src/"
+        }
+    },
+    "require": {
+        "eltharin/twigfilesgetter": "*"
+    },
+	"description": "reloadablefield Bundle for symfony",
+    "keywords": ["Symfony", "JS","CSS", "Web", "Bundle"],
+    "license": "GPL-3.0",
+	"type": "symfony-bundle",
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

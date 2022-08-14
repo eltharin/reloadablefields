@@ -1,0 +1,12 @@
+services:
+  Eltharin\ReloadableFieldBundle\Type\ReloadableEnityType:
+    autowire: yes
+    autoconfigure: yes
+    arguments: [ "@Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface", "@Symfony\\Component\\DependencyInjection\\ParameterBag\\ContainerBagInterface" ]
+
+  Eltharin\ReloadableFieldBundle\Controller\:
+    autowire: yes
+    autoconfigure: yes
+    resource: '../../../src/Controller'
+    arguments:    [ "@form.factory", "@twig"]
+    tags: ['controller.service_arguments']
