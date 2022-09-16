@@ -1,4 +1,8 @@
 services:
+  Eltharin\ReloadableFieldBundle\Command\CopyRouteFileCommand:
+    arguments: [ '%kernel.project_dir%' ]
+    tags: [ 'console.command' ]
+
   Eltharin\ReloadableFieldBundle\Type\ReloadableEnityType:
     autowire: yes
     autoconfigure: yes
@@ -7,6 +11,6 @@ services:
   Eltharin\ReloadableFieldBundle\Controller\:
     autowire: yes
     autoconfigure: yes
-    resource: '../../../src/Controller'
+    resource: '../src/Controller'
     arguments:    [ "@form.factory", "@twig"]
     tags: ['controller.service_arguments']

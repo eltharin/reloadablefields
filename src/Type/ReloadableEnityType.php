@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Markup;
 
 
 class ReloadableEnityType extends AbstractType
@@ -26,22 +27,29 @@ class ReloadableEnityType extends AbstractType
 
 	public function configureOptions(OptionsResolver $resolver)
 	{
-		parent::configureOptions($resolver);
+		$resolver->setDefaults([
+			'reloadbtn' => '<span class="btn success reloader" data-target="{{ id }}" />reload</span>',
+			'endpoint' => 'eltharin_reloadablefields_endpoint',
+		]);
 	}
 
 	public function buildView(FormView $view, FormInterface $form, array $options)
 	{
-		FileManager::registerJsFile('/bundles/eltharinreloadablefield/js/reloader.js');
+		if(!$this->containerBag->get('eltharin_reloadable_field__useownjsfile') && class_exists(FileManager::class ))
+		{
+			FileManager::registerJsFile('/bundles/eltharinreloadablefield/js/reloader.js');
+		}
 
 		parent::buildView($view, $form, $options);
 
 		$view->vars['attr']['class'] = ($options['attr']['class']??'') . ' reloadable';
-		$view->vars['attr']['data-reload-url'] = $this->router->generate($this->containerBag->get('eltharin_reloadable_field__endpoint'), [
+		$view->vars['attr']['data-reload-url'] = $options['attr']['data-reload-url'] ?? $this->router->generate($options['endpoint'], [
 			'type' => base64_encode(get_class($form->getParent()->getRoot()->getConfig()->getType()->getInnerType())),
 			'entitytype' => base64_encode(get_class($form->getParent()->getRoot()->getViewData())),
 			'field' => $view->vars['name']
 		]);
 
-		$view->vars = call_user_func($this->containerBag->get('eltharin_reloadable_field__showbtn'), $view->vars);
+		$view->vars['params']['after'][] = $options['reloadbtn'];
+
 	}
 }
