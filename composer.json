@@ -5,9 +5,6 @@
             "Eltharin\\ReloadableFieldBundle\\": "src/"
         }
     },
-    "require": {
-        "eltharin/twigfilesgetter": "*"
-    },
 	"description": "reloadablefield Bundle for symfony",
     "keywords": ["Symfony", "JS","CSS", "Web", "Bundle"],
     "license": "GPL-3.0",
