@@ -14,6 +14,7 @@ class EltharinReloadableFieldBundle extends AbstractBundle
 	public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
 	{
 		$container->parameters()->set('eltharin_reloadable_field__useownjsfile', $config['useOwnJsFile']);
+		$container->parameters()->set('eltharin_reloadable_field__reloadButtonHtml', $config['reloadButtonHtml']);
 	}
 
 	public function configure(DefinitionConfigurator $definition): void
@@ -21,6 +22,7 @@ class EltharinReloadableFieldBundle extends AbstractBundle
 		$definition->rootNode()
 						->children()
 							->scalarNode('useOwnJsFile')->defaultValue( false)->end()
+							->scalarNode('reloadButtonHtml')->defaultValue( '<i class="fa-solid fa-rotate fa-2x reloader" data-target="{{ id }}"></i>')->end()
 						->end()
 		;
 	}

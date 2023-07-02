@@ -12,5 +12,5 @@ services:
     autowire: yes
     autoconfigure: yes
     resource: '../src/Controller'
-    arguments:    [ "@form.factory", "@twig"]
+    arguments:    [ "@form.factory", "@twig", "@Doctrine\\ORM\\EntityManagerInterface"]
     tags: ['controller.service_arguments']

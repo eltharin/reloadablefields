@@ -1,19 +1,4 @@
-//-- create function for add event as $(document).on(eventName, elementSelector, handler) in jQuery
-if(typeof addEvent != 'function'){
-   window.addEvent = function(eventName, elementSelector, handler)
-{
-    document.addEventListener(eventName, function(e) {
-        for (var target = e.target; target && target != this; target = target.parentNode) {
-            if (target.matches(elementSelector)) {
-                handler.call(target, e);
-                break;
-            }
-        }
-    }, false);
-};
-}
-
-addEvent('reload', '.reloadable', function() {
+JR.events.add( '.reloadable', 'reload',function(e) {
     let request = new XMLHttpRequest();
     let item = this;
     request.open('GET', item.dataset.reloadUrl, true);
@@ -23,14 +8,34 @@ addEvent('reload', '.reloadable', function() {
             // Success!
             let resp = this.response;
             item.innerHTML = resp;
+            if(e.detail.onReload !== undefined)
+            {
+                e.detail.onReload.call(item , item, this);
+            }
         }
     };
 
     request.send();
 });
 
-addEvent('click', '.reloader', function() {
-    let target = document.querySelector('#' + this.dataset.target);
-    let event = new Event("reload", {"bubbles":true, "cancelable":false})
-    target.dispatchEvent(event);
+JR.events.add( '.reloader', 'click',function() {
+    JR.events.dispatch('#' + this.dataset.target, 'reload');
+});
+
+JR.events.add('.addAndReload',  'onFormSubmitSuccess',function(event)
+{
+    var textToSearch = "";
+    if(this.dataset.formfield !== undefined)
+    {
+        textToSearch = event.detail.formData.get(this.dataset.formfield) || "";
+    }
+
+    JR.events.dispatch('#' + this.dataset.target, 'reload', { "detail": {onReload : function (select,httprequest) {
+
+                if(textToSearch != "")
+                {
+                    const optionToSelect = Array.from(select.options).find(item => item.text === textToSearch);
+                    optionToSelect.selected = true;
+                }
+            }}});
 });

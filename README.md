@@ -58,7 +58,22 @@ services:
       - { name: twig.extension }
 ```
 
-You can change the button format by setting reloadbtn option in Type, default is :
+ReloadButton HTML
+---
+By default, the HTML of the ReloadButton use fontAwesome : 
+
+``` php
+'<i class="fa-solid fa-rotate fa-2x reloader" data-target="{{ id }}"></i>'
+```
+
+For change the ReloadButton HTML for all of your site, you can set in your package configuration file :
+
+``` yaml
+eltharin_reloadable_field:
+    'reloadButtonHtml': '<span class="btn success reloader" data-target="{{ id }}" />reload</span>'
+```
+
+or for change only once, in Type Class : 
 
 ``` php
 'reloadbtn' => '<span class="btn success reloader" data-target="{{ id }}" />reload</span>',
@@ -72,7 +87,7 @@ if you want your own route for ajax query you can set endpoint option in Type
 
 this route must have 3 parameters, 
 * the FormType classname where the call is make
-* the Entity Class name
+* the Options passed to entity (be carreful when you pass entity as options, you nedd to manage them for can be used)
 * the field to reload
 
 or set attr['data-reload-url'] with the complete route
