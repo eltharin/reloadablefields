@@ -24,7 +24,7 @@ class CopyRouteFileCommand extends Command
 		$this->projectDir = $projectDir;
 	}
 
-	protected function configure()
+	protected function configure() : void
 	{
 		$this
 			->setHelp('Copy route file')

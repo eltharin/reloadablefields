@@ -18,12 +18,12 @@ class ReloadableEnityType extends AbstractType
 	{
 	}
 
-	public function getParent()
+	public function getParent() : ?string
 	{
 		return EntityType::class;
 	}
 
-	public function configureOptions(OptionsResolver $resolver)
+	public function configureOptions(OptionsResolver $resolver) : void
 	{
 		$resolver->setDefaults([
             'reloadbtn' => '',
@@ -32,7 +32,7 @@ class ReloadableEnityType extends AbstractType
 		]);
 	}
 
-	public function buildView(FormView $view, FormInterface $form, array $options)
+	public function buildView(FormView $view, FormInterface $form, array $options) : void
 	{
 		if(!$this->containerBag->get('eltharin_reloadable_field__useownjsfile') && class_exists(FileManager::class ))
 		{

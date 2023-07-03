@@ -31,11 +31,10 @@ JR.events.add('.addAndReload',  'onFormSubmitSuccess',function(event)
     }
 
     JR.events.dispatch('#' + this.dataset.target, 'reload', { "detail": {onReload : function (select,httprequest) {
-
-                if(textToSearch != "")
-                {
-                    const optionToSelect = Array.from(select.options).find(item => item.text === textToSearch);
-                    optionToSelect.selected = true;
-                }
-            }}});
+        if(textToSearch != "")
+        {
+            const optionToSelect = Array.from(select.options).find(item => item.text === textToSearch);
+            optionToSelect.selected = true;
+        }
+    }}});
 });
