@@ -30,6 +30,8 @@ The select will have a new event "reload" witch call an ajax query.
 When you modify in other page the data linked to the field you can easiest reload them.
 
 
+This library use junior.js, my small library for manage events, http request and other. you can use your own.
+
 ``` yaml
 # config/packages/eltharin_reloadable_field.yaml
 
@@ -91,3 +93,31 @@ this route must have 3 parameters,
 * the field to reload
 
 or set attr['data-reload-url'] with the complete route
+
+Bonus
+---
+
+How add a "add" button for launch a form popup and reload automaticly the select : 
+
+1- in Type Class : add params :
+``` php
+'params' => ['after' => ['<i class="fa-regular fa-square-plus openpopup  fa-2x addAndReload" data-target="{{ id }}" data-formfield="type[libelle]" href="/gestion/type/new" ></i>']]
+```
+
+2- create your js function for create popup and load your form into
+
+3- after form submit execute js for reload and select your new field : 
+
+    var textToSearch = "";
+    if(this.dataset.formfield !== undefined)
+    {
+        textToSearch = event.detail.formData.get(this.dataset.formfield) || "";
+    }
+
+    JR.events.dispatch('#' + this.dataset.target, 'reload', { "detail": {onReload : function (select,httprequest) {
+        if(textToSearch != "")
+        {
+            const optionToSelect = Array.from(select.options).find(item => item.text === textToSearch);
+            optionToSelect.selected = true;
+        }
+    }}});
