@@ -85,8 +85,4 @@ class ReloadableEnityType extends AbstractType
 		$view->vars['params']['after'][] = $options['reloadbtn'] ?: $this->containerBag->get('eltharin_reloadable_field__reloadButtonHtml');
 	}
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-
-    }
 }
