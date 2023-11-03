@@ -2,24 +2,21 @@
 
 namespace Eltharin\ReloadableFieldBundle\Controller;
 
-use App\Controller\PlantController;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Routing\Router;
-use Twig\Environment;
-use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\DomCrawler\Crawler;
 
 class ReloadFieldController extends AbstractController
 {
-	public function reload($uuid, $fieldName, Request $request)
+	public function __construct(protected RequestStack $request)
 	{
-		$requestFrom = $request->getSession()->get('formRelaodableRequests')[$uuid];
+	}
+
+	public function reload($uuid, $fieldName)
+	{
+		$requestFrom = $this->request->getSession()->get('formRelaodableRequests')[$uuid];
 
 		$request = Request::create($requestFrom['url'], $requestFrom['method']);
 
