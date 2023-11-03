@@ -1,4 +1,4 @@
-JR.events.add( '.reloadable', 'reload',function(e) {
+JR.events.add( 'reload','.reloadable', function(e) {
     let request = new XMLHttpRequest();
     let item = this;
     request.open('GET', item.dataset.reloadUrl, true);
@@ -18,11 +18,11 @@ JR.events.add( '.reloadable', 'reload',function(e) {
     request.send();
 });
 
-JR.events.add( '.reloader', 'click',function() {
-    JR.events.dispatch('#' + this.dataset.target, 'reload');
+JR.events.add( 'click','.reloader', function() {
+    JR.events.dispatch('reload', '#' + this.dataset.target);
 });
 
-JR.events.add('.addAndReload',  'onFormSubmitSuccess',function(event)
+JR.events.add('onFormSubmitSuccess','.addAndReload',  function(event)
 {
     var textToSearch = "";
     if(this.dataset.formfield !== undefined)
@@ -30,7 +30,7 @@ JR.events.add('.addAndReload',  'onFormSubmitSuccess',function(event)
         textToSearch = event.detail.formData.get(this.dataset.formfield) || "";
     }
 
-    JR.events.dispatch('#' + this.dataset.target, 'reload', { "detail": {onReload : function (select,httprequest) {
+    JR.events.dispatch('reload', '#' + this.dataset.target, { "detail": {onReload : function (select,httprequest) {
         if(textToSearch != "")
         {
             const optionToSelect = Array.from(select.options).find(item => item.text === textToSearch);
