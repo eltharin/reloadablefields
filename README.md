@@ -15,11 +15,7 @@ Installation
 composer require eltharin/reloadablefield
 ```
 
-* Copy the route file :
 
-``` bash
-php bin/console eltharinreloadablefield:copyroutefile
-```
 
 What is ReloadableFields Bundle?
 ---------------------------
@@ -30,13 +26,24 @@ The select will have a new event "reload" witch call an ajax query.
 When you modify in other page the data linked to the field you can easiest reload them.
 
 
-This library use junior.js, my small library for manage events, http request and other. you can use your own.
+This library use junior.js, my small library for manage events, http request and other. 
+
+you can download it like this : 
+
+You nedd to have the JuniorJs suite for use this bundle :
+
+``` bash
+composer require eltharin/juniorjs
+```
+
+
+Or you can use your own script by settings this configuration :
 
 ``` yaml
 # config/packages/eltharin_reloadable_field.yaml
 
 eltharin_reloadable_field:
-  useOwnJsFile: false
+  useOwnJsFile: true
 ```
 
 if you want to use default JS for ajax query, leave useOwnJsFile parameters at false and import eltharin/twigfilesgetter for load unique Js : https://github.com/eltharin/TwigFilesGetter 
@@ -46,19 +53,20 @@ by default, it adds a markup in params/after, you need to update your form theme
 ``` php
 # form theme twig template
 
+{%- block form_row -%}
+
+...
+
 {%- for after in params.after -%}
-    {{- include(template_from_string(before ?? '')) -}}
+    {{ block(after[0]) }}
 {%- endfor -%}
+
+...
+
+{%- endblock form_row -%}
+
 ```
 
-and to use template_form_string in twig put in services.yaml : 
-``` yaml
-services:
-  twig.extension.stringloader:
-    class: \Twig\Extension\StringLoaderExtension
-    tags:
-      - { name: twig.extension }
-```
 
 ReloadButton HTML
 ---
@@ -68,31 +76,22 @@ By default, the HTML of the ReloadButton use fontAwesome :
 '<i class="fa-solid fa-rotate fa-2x reloader" data-target="{{ id }}"></i>'
 ```
 
-For change the ReloadButton HTML for all of your site, you can set in your package configuration file :
+For change the ReloadButton HTML for all of your site, you can create a form template with a block named reloadablefield_reload_button :
 
-``` yaml
-eltharin_reloadable_field:
-    'reloadButtonHtml': '<span class="btn success reloader" data-target="{{ id }}" />reload</span>'
+``` php
+{%- block reloadablefield_reload_button -%}
+	<i class="fa-solid fa-rotate fa-2x reload_button" data-target="{{ id }}"></i>
+{%- endblock reloadablefield_reload_button -%}
 ```
 
 or for change only once, in Type Class : 
 
 ``` php
-'reloadbtn' => '<span class="btn success reloader" data-target="{{ id }}" />reload</span>',
+'reloadbtn' => '<span class="btn success reload_button" data-target="{{ id }}" />reload</span>',
 ```
+Don't forget to add reload_button class for use default js.
 
-if you want your own route for ajax query you can set endpoint option in Type
 
-``` php
-'endpoint' => 'eltharin_reloadablefields_endpoint',
-```
-
-this route must have 3 parameters, 
-* the FormType classname where the call is make
-* the Options passed to entity (be carreful when you pass entity as options, you nedd to manage them for can be used)
-* the field to reload
-
-or set attr['data-reload-url'] with the complete route
 
 Bonus
 ---
@@ -104,20 +103,29 @@ How add a "add" button for launch a form popup and reload automaticly the select
 'params' => ['after' => ['<i class="fa-regular fa-square-plus openpopup  fa-2x addAndReload" data-target="{{ id }}" data-formfield="type[libelle]" href="/gestion/type/new" ></i>']]
 ```
 
-2- create your js function for create popup and load your form into
+2- with openpopup class, form will be called in ajax and print in a popup
 
-3- after form submit execute js for reload and select your new field : 
+3- by default automaticly, it add an event "onFormSubmitSuccess" executed after form submit : 
 
+``` js
+JR.events.add('onFormSubmitSuccess','.addAndReload',  function(event)
+{
     var textToSearch = "";
     if(this.dataset.formfield !== undefined)
     {
         textToSearch = event.detail.formData.get(this.dataset.formfield) || "";
     }
 
-    JR.events.dispatch('#' + this.dataset.target, 'reload', { "detail": {onReload : function (select,httprequest) {
-        if(textToSearch != "")
-        {
-            const optionToSelect = Array.from(select.options).find(item => item.text === textToSearch);
-            optionToSelect.selected = true;
+    JR.events.dispatch('reload', '#' + this.dataset.target, {
+        "detail": {
+            onReload : function (select,httprequest) {
+                if(textToSearch != "")
+                {
+                    const optionToSelect = Array.from(select.options).find(item => item.text === textToSearch);
+                    optionToSelect.selected = true;
+                }
+            }
         }
-    }}});
+    });
+});
+```

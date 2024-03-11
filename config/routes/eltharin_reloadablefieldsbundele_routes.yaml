@@ -1,4 +1,0 @@
-eltharin_reloadablefields_endpoint:
-  path:       /ajax/reload/{uuid}/{fieldName}
-  controller: Eltharin\ReloadableFieldBundle\Controller\ReloadFieldController::reload
-  methods:    GET
