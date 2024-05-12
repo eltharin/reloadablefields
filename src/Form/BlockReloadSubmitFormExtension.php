@@ -19,13 +19,12 @@ class BlockReloadSubmitFormExtension extends AbstractTypeExtension
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $formError = new FormError('relaod form');
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use($formError): void {
+            function (FormEvent $event) : void {
                 if($event->getForm()->getRoot()->getErrors()->count() == 0 && $this->requestStack->getMainRequest()->headers->get('X-reload-form') == 1)
                 {
-                    $event->getForm()->getRoot()->addError($formError);
+                    $event->getForm()->getRoot()->addError(new FormError('relaod form'));
                 }
             }
         );

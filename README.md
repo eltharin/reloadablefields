@@ -103,9 +103,9 @@ How add a "add" button for launch a form popup and reload automaticly the select
 'params' => ['after' => ['<i class="fa-regular fa-square-plus openpopup  fa-2x addAndReload" data-target="{{ id }}" data-formfield="type[libelle]" href="/gestion/type/new" ></i>']]
 ```
 
-2- with openpopup class, form will be called in ajax and print in a popup
+2- with my other JS bundle : https://github.com/eltharin/juniorjs you can have the openpopup class, form will be called in ajax and print in a popup
 
-3- by default automaticly, it add an event "onFormSubmitSuccess" executed after form submit : 
+3- by default automaticly, it add an event "onFormSubmitSuccess" executed after form submit per example: 
 
 ``` js
 JR.events.add('onFormSubmitSuccess','.addAndReload',  function(event)
