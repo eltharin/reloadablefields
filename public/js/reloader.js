@@ -24,9 +24,6 @@ JR.events.add('onFormSubmitSuccess','.addAndReload',  function(event)
     JR.events.dispatch('reload', '#' + this.dataset.target, {
         "detail": {
             onReload : function (select,html) {
-                console.log('coucou');
-                console.log(select);
-
                 if(textToSearch != "")
                 {
                     const optionToSelect = Array.from(select.options).find(item => item.text === textToSearch);
